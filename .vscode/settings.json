@@ -83,6 +83,9 @@
         "stop_token": "cpp",
         "text_encoding": "cpp",
         "thread": "cpp",
-        "cinttypes": "cpp"
+        "cinttypes": "cpp",
+        "codecvt": "cpp",
+        "fstream": "cpp",
+        "stack": "cpp"
     }
 }

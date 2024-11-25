@@ -7,7 +7,6 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <cstring> // For memset
-#include <sys/select.h>
 
 using Socket = int;
 
@@ -98,9 +97,7 @@ int main(int argc, char* argv[]) {
         
     }
     */
-
-
-    /*
+   
     while (true) {
         message = readFromServer(clientSocket);
         std::cout << message;
@@ -108,33 +105,8 @@ int main(int argc, char* argv[]) {
             std::cin >> message;
             message.append("\r\n");
             writeToServer(clientSocket, message);
-        }
+        } 
     }
-    */
-    
-    fd_set curr_fd;
-    fd_set read_fd;
-    FD_ZERO(&curr_fd);
-    FD_ZERO(&read_fd);
-    FD_SET(clientSocket, &read_fd);
-
-    while (true) {
-        while (true) {
-            curr_fd = read_fd;
-            select(clientSocket+1, &curr_fd, NULL, NULL, NULL);
-            if (FD_ISSET(clientSocket, &curr_fd)) {
-                message = readFromServer(clientSocket);
-                std::cout << message;
-            } else {
-                break;
-            }
-        }
-        std::cin >> message;
-        message.append("\r\n");
-        writeToServer(clientSocket, message);
-    }
-    
-
 
     // Close the socket
     close(clientSocket);
