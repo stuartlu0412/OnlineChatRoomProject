@@ -1,5 +1,3 @@
-#define SERVER_PORT 4445
-#define MAX_MSG_LEN 128
 #define ERR_EXIT(a) do { perror(a); exit(1); } while(0)
 
 #include <iostream>
@@ -20,8 +18,11 @@ using Socket = int;
 using IPString = std::string;
 using Port = int;
 
-// ----------------------- UserManager Class -----------------------
+constexpr int MAX_MSG_LEN = 128;
+constexpr char USER_DB[] = "./UserDB";
+constexpr char WELCOME_MSG[] = "Please choose to Login, Logout or Register\n";
 
+// ----------------------- UserManager Class -----------------------
 class UserManager {
 private:
 
@@ -34,11 +35,6 @@ private:
     Password hashPasswd(const Password& passwd);
 
 public:
-
-    UserManager() 
-    {
-        //UserDB = fopen("./UserDB", "a+");
-    }
     
     int registerUser(const Username& username, const Password& passwd);
     int loginUser(const Username& username, const Password& passwd);
@@ -48,7 +44,7 @@ public:
 
 bool UserManager::userExist(const Username& username) {
 
-    std::ifstream UserDB("./UserDB");
+    std::ifstream UserDB(USER_DB);
     //std::cout << "Checking user..." << std::endl;
 
     std::string line;
@@ -109,7 +105,7 @@ int UserManager::loginUser(const Username& username, const Password& passwd) {
 }
 
 int UserManager::logoutUser(const Username&) {
-
+    
 }
 
 // ----------------------- Client Class -------------------------------
@@ -150,7 +146,7 @@ private:
 
     void acceptConnections();
 
-    int handleMessage(Socket clientSocket);
+    int handleMessage(Socket clientSocket); // this function is handled in threadpool
     std::string readFromClient(Socket clientSocket);
     int writeToClient(Socket clientSocket, std::string&& message);
 
@@ -248,8 +244,7 @@ int Server::handleMessage(Socket clientSocket) {
 
     while (true) {
         // read in message
-
-        writeToClient(clientSocket, "Please choose to Login, Logout or Register\n");
+        writeToClient(clientSocket, WELCOME_MSG);
 
         std::string clientMessage = readFromClient(clientSocket);
 
@@ -338,6 +333,11 @@ int Server::handleMessage(Socket clientSocket) {
 
 
 int main(int argc, char* argv[]) {
+
+    if (argc != 2) {
+        std::cerr << "Usage: " << argv[0] << " <port>\n";
+        return EXIT_FAILURE;
+    }
     
     Port port;
     sscanf(argv[1], "%d", &port);

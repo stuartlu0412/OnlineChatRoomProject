@@ -24,7 +24,7 @@ private:
     
 public:
 
-    Client(Port serverPort, IPString serverIP)
+    Client(const Port serverPort, const IPString serverIP)
         : serverPort_(serverPort)
         , serverIP_(serverIP)
     {}
@@ -33,19 +33,30 @@ public:
 
 };
 
-Client::Client(Port serverPort, IPString serverIP) {
+Client::Client(const Port serverPort, const IPString serverIP) {
     // initialized the client
 }
 
-Client::run() {
+void Client::run() {
     // read server message until there is nothing to read
     // write to server
 }
 
 int main(int argc, char* argv[]) {
+
     if (argc != 3) {
         std::cerr << "Usage: " << argv[0] << " <Server IP> <Server Port>\n";
         return 1;
     }
+
+    // Extract server IP and port from command line arguments
+    IPString serverIP = argv[1];
+    short serverPort;
+    std::sscanf(argv[2], "%hd", &serverPort);
+
+    try {
+        Client client
+    }
+
 
 }
