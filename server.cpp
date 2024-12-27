@@ -2,7 +2,7 @@
 #include <iostream>
 
 int main() {
-    const int port = 8080;          // Port to listen on
+    const int port = 8088;          // Port to listen on
     const size_t threadCount = 10;  // Number of threads in the ThreadPool
 
     try {
